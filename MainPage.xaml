@@ -1,0 +1,69 @@
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:AppArticulos"
+             x:Class="AppArticulos.MainPage"
+             Title="Lista de Artículos">
+
+    <StackLayout Padding="10">
+
+        <Label Text="Artículos disponibles"
+               FontSize="20"
+               HorizontalOptions="Center" />
+
+        <SearchBar Placeholder="Buscar artículo..."
+           x:Name="Buscador"
+           TextChanged="OnSearchTextChanged"
+           Margin="0,10"/>
+
+        <Label x:Name="MensajeVacio"
+       Text="No se encontraron artículos"
+       IsVisible="False"
+       FontSize="14"
+       HorizontalOptions="Center"
+       TextColor="Gray"
+       Margin="0,5"/>
+
+        <StackLayout Margin="0,20">
+            <Label x:Name="InternetLabel" />
+            <Label x:Name="WifiLabel" />
+            <Label x:Name="GpsLabel" />
+            <Label x:Name="BluetoothLabel" />
+        </StackLayout>
+        <Label x:Name="UltimaVerificacionLabel"
+        Text="Última verificación: --"
+        FontSize="12"
+        HorizontalOptions="Center"
+        TextColor="Gray"
+        Margin="0,5"/>
+        
+        <CollectionView x:Name="ArticulosList" Margin="0,10">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame BorderColor="Gray" CornerRadius="10" Padding="10" Margin="0,5">
+                        <StackLayout>
+                            <Label Text="{Binding articulo}" FontAttributes="Bold" FontSize="18"/>
+                            <Label Text="{Binding codigo_barra}" FontSize="14" />
+                            <Label FontSize="14">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Precio: RD$ " />
+                                        <Span Text="{Binding precio}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <Label FontSize="14">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Existencia: " />
+                                        <Span Text="{Binding existencia_texto}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>

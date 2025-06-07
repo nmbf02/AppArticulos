@@ -21,32 +21,24 @@ public partial class MainPage : ContentPage
     {
         InitializeComponent();
         _apiService = new ApiService();
-        CargarArticulos();
         VerificarEstados(); // Ejecuta verificación al abrir
         IniciarVerificacionAutomatica(); // actualización automática cada 5 segundos
     }
 
-    private async void CargarArticulos()
+    private async void OnSearchTextChanged(object sender, TextChangedEventArgs e)
     {
-        todosLosArticulos = await _apiService.ObtenerArticulosAsync();
-        ArticulosList.ItemsSource = todosLosArticulos;
-    }
+        var texto = e.NewTextValue?.Trim();
 
-    private void OnSearchTextChanged(object sender, TextChangedEventArgs e)
-    {
-        var texto = e.NewTextValue?.ToLower() ?? "";
+        if (string.IsNullOrEmpty(texto))
+        {
+            ArticulosList.ItemsSource = null;
+            MensajeVacio.IsVisible = false;
+            return;
+        }
 
-        var filtrados = todosLosArticulos
-            .Where(a =>
-                (!string.IsNullOrEmpty(a.articulo) && a.articulo.ToLower().Contains(texto)) ||
-                (!string.IsNullOrEmpty(a.codigo_barra) && a.codigo_barra.ToLower().Contains(texto))
-            )
-            .ToList();
-
-        ArticulosList.ItemsSource = filtrados;
-
-        // Mostrar u ocultar el mensaje de "No se encontraron artículos"
-        MensajeVacio.IsVisible = filtrados.Count == 0;
+        var articulos = await _apiService.ObtenerArticulosAsync(texto);
+        ArticulosList.ItemsSource = articulos;
+        MensajeVacio.IsVisible = articulos.Count == 0;
     }
 
     private async void VerificarEstados()

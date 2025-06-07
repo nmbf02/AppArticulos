@@ -1,36 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Http;
+using System.Text.Json;
 using AppArticulos.Models;
-using System.Net.Http.Json;
 
 namespace AppArticulos.Services
 {
     public class ApiService
     {
-        private readonly HttpClient _httpClient;
-
-        public ApiService()
+        public async Task<List<Articulo>> ObtenerArticulosAsync(string consulta)
         {
-            _httpClient = new HttpClient();
-        }
+            string url = $"https://softecard.com/borrar.php?t=Articulo_Lista_Select&consulta={consulta}";
 
-        public async Task<List<Articulo>> ObtenerArticulosAsync()
-        {
-            var url = "https://softecard.com/borrar.php?t=Articulo_Lista_Select&consulta=";
+            using var client = new HttpClient();
+            var response = await client.GetStringAsync(url);
 
-            try
-            {
-                var response = await _httpClient.GetFromJsonAsync<ArticuloResponse>(url);
-                return response?.articulos ?? new List<Articulo>();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al consumir el API: " + ex.Message);
-                return new List<Articulo>();
-            }
+            var result = JsonSerializer.Deserialize<RootObject>(response);
+
+            return result?.articulos ?? new List<Articulo>();
         }
     }
 }

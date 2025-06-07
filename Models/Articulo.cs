@@ -28,4 +28,8 @@ namespace AppArticulos.Models
     {
         public List<Articulo>? articulos { get; set; }
     }
+    public class RootObject
+    {
+        public List<Articulo> articulos { get; set; } = new();
+    }
 }

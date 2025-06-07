@@ -29,7 +29,7 @@ public partial class MainPage : ContentPage
     {
         var texto = e.NewTextValue?.Trim();
 
-        if (string.IsNullOrEmpty(texto))
+        if (string.IsNullOrWhiteSpace(texto))
         {
             ArticulosList.ItemsSource = null;
             MensajeVacio.IsVisible = false;
